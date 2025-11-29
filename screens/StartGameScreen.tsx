@@ -5,7 +5,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 
 
 
-function StartGameScreen() {
+function StartGameScreen({onPickedNumber}: {onPickedNumber: (pickedNumber: number) => void}) {
   const [enteredNumber, setEnteredNumber] = useState<string>('');
 
   function numberInputHandler(enteredText: string) {
@@ -17,7 +17,7 @@ function StartGameScreen() {
   }
 
   function confirmInputHandler() {
-    const chosenNumber = parseInt(enteredNumber);
+    const chosenNumber= parseInt(enteredNumber);
 
     if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
       Alert.alert(
@@ -28,7 +28,7 @@ function StartGameScreen() {
       return;
     }
 
-    console.log('Valid number!');
+    onPickedNumber(chosenNumber);
   }
 
   return (
