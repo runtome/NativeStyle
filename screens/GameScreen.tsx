@@ -24,7 +24,7 @@ let maxBoundary = 100;
 
 type GameScreenProps = {
   userNumber: number;
-  onGameOver: () => void;
+  onGameOver: (roundNumber: number) => void;
 };
 
 function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
@@ -38,7 +38,7 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
   
   useEffect(() => {
     if (currentGuess === userNumber) {
-      onGameOver();
+      onGameOver(guessRounds.length);
     }
   }, [currentGuess, userNumber, onGameOver]);
   useEffect(() => {
