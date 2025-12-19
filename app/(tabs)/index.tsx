@@ -22,6 +22,7 @@ export default function App() {
   // if (!fontsLoaded) {
   //   return null;
   // }
+  // Building Adaptive User Interfaces with React Native
 
   function pickedNumberHandler(pickedNumber: number) {
     setUserNumber(pickedNumber);
