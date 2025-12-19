@@ -1,6 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  View,
+  useWindowDimensions
+} from 'react-native';
 
 import GuessLogItem from '@/components/game/GuessLogItem';
 import NumberContainer from '@/components/game/NumberContainer';
@@ -34,7 +40,7 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
     userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess); 
   const [guessRounds, setGuessRounds] = useState<number[]>([initialGuess]);
-
+  const {width, height} = useWindowDimensions();
   
   useEffect(() => {
     if (currentGuess === userNumber) {
@@ -73,11 +79,9 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
     setGuessRounds((prevGuessRounds) => [newRndNumber, ...prevGuessRounds]);
   }  
 
-  return (
-    <View style={styles.screen}>
-      <Title>Opponent's Guess</Title>
+  let content = (
+    <>
       <NumberContainer>{currentGuess}</NumberContainer>
-
       <Card>
         <InstructionText style={styles.instructionText}>Higher or lower?</InstructionText>
         <View style={styles.buttonsContainer}>
@@ -94,6 +98,34 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
         </View>
 
       </Card>
+    </>
+  );
+  
+  if (width > 500) {
+    content = (
+      <>
+        <InstructionText style={styles.buttonContainer}>Higher or lower?</InstructionText>
+        <View style={styles.buttonContainerWide}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuessHandler('lower')}>
+              <Ionicons name="remove" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuessHandler('greater')}>
+              <Ionicons name="add" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+        </View>
+      </>
+    );
+  }
+
+  return (
+    <View style={styles.screen}>
+      <Title>Opponent's Guess</Title>
+      {content}
       <View style={styles.listContainer}>
         {/* {guessRounds.map((guessRound) => (
           <View key={guessRound}>
@@ -134,9 +166,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
   },
+  buttonContainerWide: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   listContainer: {
     flex: 1,
-    marginTop: 16,
+    padding: 16,
   },
   list: {
     padding: 8,
