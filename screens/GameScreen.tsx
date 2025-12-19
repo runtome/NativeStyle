@@ -31,8 +31,9 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
     minBoundary, 
     maxBoundary, 
     userNumber);
-
   const [currentGuess, setCurrentGuess] = useState(initialGuess); 
+  const [guessRounds, setGuessRounds] = useState<number[]>([initialGuess]);
+
   
   useEffect(() => {
     if (currentGuess === userNumber) {
@@ -68,6 +69,7 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
       currentGuess
     );
     setCurrentGuess(newRndNumber);
+    setGuessRounds((prevGuessRounds) => [newRndNumber, ...prevGuessRounds]);
   }  
   return (
     <View style={styles.screen}>
@@ -90,7 +92,13 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
         </View>
 
       </Card>
-      {/* <View>LOG ROUNDS</View> */}
+      <View>
+        {guessRounds.map((guessRound) => (
+          <View key={guessRound}>
+            <InstructionText>{guessRound}</InstructionText>
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
