@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
 
+import GuessLogItem from '@/components/game/GuessLogItem';
 import NumberContainer from '@/components/game/NumberContainer';
 import Card from '@/components/ui/Card';
 import InstructionText from '@/components/ui/InstructionText';
@@ -71,6 +72,7 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
     setCurrentGuess(newRndNumber);
     setGuessRounds((prevGuessRounds) => [newRndNumber, ...prevGuessRounds]);
   }  
+
   return (
     <View style={styles.screen}>
       <Title>Opponent's Guess</Title>
@@ -92,16 +94,23 @@ function GameScreen({ userNumber , onGameOver}: GameScreenProps) {
         </View>
 
       </Card>
-      <View>
+      <View style={styles.listContainer}>
         {/* {guessRounds.map((guessRound) => (
           <View key={guessRound}>
             <InstructionText>{guessRound}</InstructionText>
           </View>
         ))} */}
-        <FlatList
+        <FlatList<number>
           data={guessRounds}
-          renderItem={(item) => <Text>{item.item}</Text>}
+          renderItem={({ item, index }) => (
+            <GuessLogItem
+              roundNumber={guessRounds.length - index}
+              guess={item.toString()}
+            />
+          )}
           keyExtractor={(item) => item.toString()}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={true}
         /> 
       </View>
     </View>
@@ -113,15 +122,22 @@ export default GameScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 24
+    padding: 24,
   },
   instructionText: {
     marginBottom: 12,
   },
-    buttonsContainer: {
+  buttonsContainer: {
     flexDirection: 'row',
   },
   buttonContainer: {
-    flex: 1
+    flex: 1,
+  },
+  listContainer: {
+    flex: 1,
+    marginTop: 16,
+  },
+  list: {
+    padding: 8,
   },
 });
